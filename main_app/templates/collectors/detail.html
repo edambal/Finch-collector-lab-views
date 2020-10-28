@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Collector Details</h1>
+
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ collector.name }}</span>
+        <p>Country: {{ collector.country }}</p>
+        <p>Age: {{ collector.age }}</p>
+        <p>moto: {{ collector.moto }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col s6">
+   <form action="{% url 'addcoin' collector.id %}" method="POST">
+     {% csrf_token %}
+     {{coin_form.as_p}}
+     <input type="submit" class="btn" value="Add Coin">
+    </form>
+    <table class="striped">
+      <thead>
+        <tr><th>Coin Name</th><th>Date Found</th><th>Category</th><th>Metal</th></tr>
+      </thead>
+      <tbody>
+        {% for coin in collector.coin_set.all %}
+          <tr>
+            <td>{{coin.name}}</td>
+            <td>{{coin.datefound}}</td>
+            <td>{{coin.get_category_display}}</td>
+            <td>{{coin.get_metal_display}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+    const dateEl = document.getElementById('id_datefound');
+    M.Datepicker.init(dateEl,{
+        format: 'yyyy-mm-dd',
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        autoClose: true
+    });
+
+    const categoryEl = document.getElementById('id_category');
+    M.FormSelect.init(categoryEl);
+    const metalEl = document.getElementById('id_metal');
+    M.FormSelect.init(metalEl);
+
+</script>
+{% endblock %}

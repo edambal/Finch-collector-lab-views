@@ -1,0 +1,16 @@
+{% extends 'base.html'%}
+{% block content%}
+<h3>All Collectors</h3>
+{% for collector in collectors%}
+<div class="card">
+ <a href="/collectors/{{ collector.id }}">
+  <div class="card-content">
+    <span class="card-title">{{ collector.name }}</span>
+    <p>moto: {{ collector.moto }}</p>
+      <p>country: {{ collector.country }}</p>
+      <p>age: {{ collector.age }}</p>
+  </div>
+  </a>
+</div>
+{% endfor %}
+{% endblock%}

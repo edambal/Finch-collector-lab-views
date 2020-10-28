@@ -1,19 +1,44 @@
 from django.db import models
 
-# Create your models here.
-class Coin:
-    def __init__(self,name,metal,age,country):
-        self.name=name
-        self.metal=metal
-        self.age=age
-        self.country=country
+HISTORY = (
+    ('M' ,'Modern'),
+    ('H' , 'Historic'),
+    ('P' , 'Pre-Historic')
+)
 
-mapleleaf = Coin('mapleleafy','gold',25,'USA')
+METALS = (
+    ('G', 'GOLD'),
+    ('S', 'SILVER'),
+    ('B', 'BRONZE')
+)
+
+class Coincollector(models.Model):
+    name = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
+    moto = models.TextField(max_length=250)
+    age = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+
+class Coin(models.Model):
+    name = models.CharField(max_length=100)
+    datefound = models.DateField()
+    category = models.CharField(
+        max_length=1,
+        choices=HISTORY,
+        default=HISTORY[0][0]
+    )
+    metal = models.CharField(
+        max_length=1,
+        choices=METALS,
+        default=METALS[0][0]
+    )
+
+    coincollector = models.ForeignKey(Coincollector,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.get_category_display()} coin found on {self.datefound}'
     
-coins = [
-    Coin('maple leaf','gold',25,'Canada'),
-    Coin('American Eagle','silver',35,'USA'),
-    Coin('Valcambi Suisse','gold',15,'India'),
-    Coin('Die Struck','bronze',115,'Greece')
-
-]
+    
