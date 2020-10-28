@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'coincollector_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'coincollector',
+        'NAME': 'coincollector'
     }
 }
 

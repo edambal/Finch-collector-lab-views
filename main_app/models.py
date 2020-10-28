@@ -12,15 +12,24 @@ METALS = (
     ('B', 'BRONZE')
 )
 
+
+
+class Coinsymposium(models.Model):
+    name = models.CharField(max_length=50)
+    location = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+    
 class Coincollector(models.Model):
     name = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     moto = models.TextField(max_length=250)
     age = models.IntegerField()
+    symposiums = models.ManyToManyField(Coinsymposium)
 
     def __str__(self):
         return self.name
-
 
 class Coin(models.Model):
     name = models.CharField(max_length=100)

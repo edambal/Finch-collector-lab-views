@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
 
-from .models import Coincollector
+from .models import Coincollector , Coinsymposium
 
 from .forms import CoinForm
 
@@ -20,11 +20,26 @@ def collectors_index(request):
 
 def collectors_detail(request,collector_id):
     collector = Coincollector.objects.get(id=collector_id)
+    symposium_not_part_of = Coinsymposium.objects.exclude(id__in= collector.symposiums.all().values_list('id'))
     coin_form = CoinForm()
     return render(request,'collectors/detail.html',{
         'collector':collector,
-        'coin_form': coin_form
+        'coin_form': coin_form,
+        'symposiums': symposium_not_part_of
     })
+
+def assoc_symp(request,collector_id,symp_id):
+    collector = Coincollector.objects.get(id=collector_id)
+    symp = Coinsymposium.objects.get(id=symp_id)
+    collector.symposiums.add(symp)
+    return redirect('detail',collector_id=collector_id)
+
+def remove_symp(request,collector_id,symp_id):
+    collector = Coincollector.objects.get(id=collector_id)
+    symp = Coinsymposium.objects.get(id=symp_id)
+    collector.symposiums.remove(symp)
+    return redirect('detail',collector_id=collector_id)
+
 
 def add_coin(request,collector_id):
     form = CoinForm(request.POST)
