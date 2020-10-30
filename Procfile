@@ -1,0 +1,1 @@
+web: gunicorn coincollector_project.wsgi
