@@ -4,7 +4,7 @@ from django.http import HttpResponse
 
 from .models import Coincollector , Coinsymposium
 
-from .forms import CoinForm
+from .forms import CoinForm , CollectorForm
 
 # Create your views here.
 
@@ -17,6 +17,27 @@ def about(request):
 def collectors_index(request):
     collectors = Coincollector.objects.all()
     return render(request,'collectors/index.html',{'collectors':collectors})
+
+def add_coin(request,collector_id):
+    form = CoinForm(request.POST)
+    if form.is_valid():
+        new_coin = form.save(commit=False)
+        new_coin.coincollector_id = collector_id
+        new_coin.save()
+    return redirect('detail',collector_id=collector_id)
+
+def add_collector(request):
+    print(request.method)
+    if request.method == 'POST':
+        collector_form = CollectorForm(request.POST)
+        if collector_form.is_valid():
+            # new_collector = collector_form.save(commit=False)
+            collector_form.save()
+            return redirect('collectors_index')
+    else:
+        collector_form = CollectorForm()
+        return render(request,'collectors/add.html',{
+            'collector_form':collector_form })
 
 def collectors_detail(request,collector_id):
     collector = Coincollector.objects.get(id=collector_id)
